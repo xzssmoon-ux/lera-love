@@ -6,7 +6,10 @@ let visitorName = "";
 let unlockedFolders = parseInt(localStorage.getItem('leraUnlocked')) || 1;
 let historyLog = JSON.parse(localStorage.getItem('leraHistory')) || [];
 
-// Загрузка прогресса при старте
+// Настройки бота
+const BOT_TOKEN = "8823167341:AAFYxnFbars8Yuj9NQf9b4bRyVoI9ebisE4";
+const CHAT_ID = "8801075372"; 
+
 window.onload = function() {
     updateFoldersUI();
 };
@@ -74,7 +77,6 @@ function startFolder(num) {
     }
 }
 
-// Функция, вызываемая при завершении папки
 function finishFolder(num) {
     if (unlockedFolders < num + 1) {
         unlockedFolders = num + 1;
@@ -84,7 +86,27 @@ function finishFolder(num) {
     backToMenu();
 }
 
-// Универсальная функция сохранения
+// Отправка в Telegram (через скрытую форму, чтобы не было ошибки CORS)
+function sendToTelegram(message) {
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+    const form = document.createElement('form');
+    form.action = url;
+    form.method = 'POST';
+    form.target = 'hidden_iframe';
+
+    const chatIdInput = document.createElement('input');
+    chatIdInput.type = 'hidden'; chatIdInput.name = 'chat_id'; chatIdInput.value = CHAT_ID;
+    const textInput = document.createElement('input');
+    textInput.type = 'hidden'; textInput.name = 'text'; textInput.value = message;
+    const parseModeInput = document.createElement('input');
+    parseModeInput.type = 'hidden'; parseModeInput.name = 'parse_mode'; parseModeInput.value = 'HTML';
+
+    form.appendChild(chatIdInput); form.appendChild(textInput); form.appendChild(parseModeInput);
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+}
+
 function saveAction(question, answer) {
     const now = new Date();
     const timeStr = now.toLocaleString('ru-RU', { 
@@ -92,17 +114,15 @@ function saveAction(question, answer) {
         hour: '2-digit', minute: '2-digit', second: '2-digit' 
     });
     
-    historyLog.push({
-        time: timeStr,
-        name: visitorName,
-        question: question,
-        answer: answer
-    });
-    
+    // Сохраняем локально (для себя)
+    historyLog.push({ time: timeStr, name: visitorName, question: question, answer: answer });
     localStorage.setItem('leraHistory', JSON.stringify(historyLog));
+
+    // Отправляем тебе в ТГ
+    const tgText = `💌 <b>Действие на сайте!</b>\n\n👤 <b>Имя:</b> ${visitorName}\n🕒 <b>Время:</b> ${timeStr}\n❓ <b>Вопрос:</b> ${question}\n💬 <b>Ответ:</b> ${answer}`;
+    sendToTelegram(tgText);
 }
 
-// Сердечки
 function createHearts() {
     const container = document.getElementById('hearts-container');
     const heart = document.createElement('div');
@@ -117,14 +137,13 @@ function createHearts() {
 }
 setInterval(createHearts, 300);
 
-// --- ПАПКА 1 ---
+// --- ЛОГИКА ВОПРОСОВ ---
 function nextF1(page) {
     document.getElementById('f1-p' + currentF1Page).classList.remove('active');
     currentF1Page = page;
     document.getElementById('f1-p' + currentF1Page).classList.add('active');
 }
 
-// --- ПАПКА 3 ---
 function nextF3(page) {
     document.getElementById('f3-p' + currentF3Page).classList.remove('active');
     currentF3Page = page;
@@ -193,7 +212,6 @@ function submitOpinion() {
     nextF3(6);
 }
 
-// --- ПАПКА 4 ---
 function nextF4(page) {
     document.getElementById('f4-p' + currentF4Page).classList.remove('active');
     currentF4Page = page;
@@ -221,23 +239,53 @@ function submitF4(qNum) {
     nextF4(qNum + 1);
 }
 
-// --- ПАПКА 5 ---
+// --- ПАПКА 5: АДМИНКА ---
 function checkSecretPass() {
     const pass = document.getElementById('secretPass').value;
     if (pass === '1110') {
         document.getElementById('f5-p1').classList.remove('active');
         document.getElementById('f5-p2').classList.add('active');
-        
-        let dataText = "";
-        if (historyLog.length === 0) {
-            dataText = "Пока нет действий.";
-        } else {
-            historyLog.forEach(item => {
-                dataText += `[${item.time}]\nИмя: ${item.name || "Неизвестно"}\nВопрос: ${item.question}\nОтвет: ${item.answer}\n\n`;
-            });
-        }
-        document.getElementById('admin-data').innerText = dataText.trim();
     } else {
         alert("Неверный пароль!");
+    }
+}
+
+async function fetchAdminData() {
+    const dataBox = document.getElementById('admin-data');
+    dataBox.innerText = "Загрузка...";
+    
+    // Скачиваем обновления бота (последние 100 сообщений, адресованные боту)
+    const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?limit=100`;
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (!data.ok) {
+            dataBox.innerText = "Ошибка доступа к Telegram. Убедись, что ты написал боту /start.";
+            return;
+        }
+
+        let resultText = "";
+        
+        if (data.result.length === 0) {
+            resultText = "Пока нет записей.";
+        } else {
+            data.result.forEach(update => {
+                if (update.message && update.message.text && update.message.chat.id == CHAT_ID) {
+                    // Если это сообщение от бота, а не от человека (убираем HTML теги для красоты)
+                    let txt = update.message.text;
+                    resultText += txt + "\n\n-------------------\n\n";
+                }
+            });
+            
+            if (resultText === "") {
+                resultText = "Нет новых записей.";
+            }
+        }
+        
+        dataBox.innerText = resultText.trim();
+    } catch (e) {
+        dataBox.innerText = "Ошибка соединения с сервером Telegram.";
     }
 }
