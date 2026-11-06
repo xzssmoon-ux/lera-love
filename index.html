@@ -8,11 +8,8 @@
 </head>
 <body>
 
-    <!-- Угловые орнаменты (Бантики) -->
     <div class="corner top-left"></div>
     <div class="corner bottom-right"></div>
-
-    <!-- Плавающие сердечки на фоне -->
     <div id="hearts-container"></div>
 
     <!-- ЭКРАН АВТОРИЗАЦИИ -->
@@ -174,12 +171,16 @@
             <button class="ans-btn" onclick="checkSecretPass()">Войти 🔑</button>
             <button class="next-btn" onclick="backToMenu()">Назад 🏠</button>
         </div>
-        <div class="page" id="f5-p2">
+        <div class="page" id="f5-p2" style="justify-content: flex-start; padding-top: 20px;">
             <h2>Котики (Админ-панель)</h2>
-            <p id="admin-data" style="color: #333; font-size: 12px; line-height: 1.5; white-space: pre-wrap; text-align: left; max-height: 50vh; overflow-y: auto; background: #fff; padding: 10px; border-radius: 10px; border: 1px solid #ccc; width: 90%;"></p>
-            <button class="next-btn" onclick="backToMenu()">В меню 🏠</button>
+            <button class="ans-btn" onclick="fetchAdminData()" style="margin-bottom: 10px;">🔄 Обновить данные</button>
+            <p id="admin-data" style="color: #333; font-size: 12px; line-height: 1.5; white-space: pre-wrap; text-align: left; max-height: 50vh; overflow-y: auto; background: #fff; padding: 10px; border-radius: 10px; border: 1px solid #ccc; width: 90%;">Нажми кнопку "Обновить данные", чтобы скачать ответы с сервера.</p>
+            <button class="next-btn" onclick="backToMenu()" style="margin-top: 10px;">В меню 🏠</button>
         </div>
     </div>
+
+    <!-- Скрытый iframe для отправки в ТГ (обход CORS) -->
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
     <script src="script.js"></script>
 </body>
