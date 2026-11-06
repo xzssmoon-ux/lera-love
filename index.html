@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для Леры ❤️</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Угловые орнаменты (Бантики) -->
+    <div class="corner top-left"></div>
+    <div class="corner bottom-right"></div>
+
+    <!-- Плавающие сердечки на фоне -->
+    <div id="hearts-container"></div>
+
+    <!-- ЭКРАН АВТОРИЗАЦИИ -->
+    <div class="book active" id="login-screen">
+        <h2>Как тебя зовут? 💖</h2>
+        <input type="text" id="visitorName" placeholder="Напиши своё имя...">
+        <button class="next-btn" onclick="loginUser()">Войти 💌</button>
+    </div>
+
+    <!-- ЭКРАН ВЫБОРА ПАПОК -->
+    <div class="book" id="menu-screen" style="display: none;">
+        <h2 style="margin-top: 20px; margin-bottom: 25px;">Выбери папку:</h2>
+        <div class="folders">
+            <div class="folder" id="folder-btn-1" onclick="startFolder(1)">📁 Папка 1</div>
+            <div class="folder locked" id="folder-btn-2" onclick="checkLock(2)">🔒 Папка 2</div>
+            <div class="folder locked" id="folder-btn-3" onclick="checkLock(3)">🔒 Папка 3</div>
+            <div class="folder locked" id="folder-btn-4" onclick="checkLock(4)">🔒 Папка 4</div>
+            <div class="folder locked" id="folder-btn-5" onclick="checkLock(5)">🔒 Папка 5</div>
+        </div>
+    </div>
+
+    <!-- ПАПКА 1: КОМПЛИМЕНТЫ -->
+    <div class="book" id="folder1" style="display: none;">
+        <div class="page active" id="f1-p1">
+            <img src="https://i.ibb.co/F4NGb43Y/image.jpg" alt="Фото" class="page-img">
+            <p class="compliment">Лерочка, солнышко, твоя улыбка способна осветить даже самый хмурый день. Ты невероятно красива! ❤️</p>
+            <button class="next-btn" onclick="nextF1(2)">Дальше 💖</button>
+        </div>
+        <div class="page" id="f1-p2">
+            <img src="https://i.ibb.co/F4NGb43Y/image.jpg" alt="Фото" class="page-img">
+            <p class="compliment">Дорогая, в твоих глазах можно утонуть. Ты настоящее произведение искусства. ✨</p>
+            <button class="next-btn" onclick="nextF1(3)">Дальше 💖</button>
+        </div>
+        <div class="page" id="f1-p3">
+            <img src="https://i.ibb.co/F4NGb43Y/image.jpg" alt="Фото" class="page-img">
+            <p class="compliment">Любимая, с тобой мир становится ярче и добрее. Ты моё настоящее чудо. 🌸</p>
+            <button class="next-btn" onclick="nextF1(4)">Дальше 💖</button>
+        </div>
+        <div class="page" id="f1-p4">
+            <img src="https://i.ibb.co/F4NGb43Y/image.jpg" alt="Фото" class="page-img">
+            <p class="compliment">Солнышко, у тебя самая милая и искренняя улыбка на свете. 😍</p>
+            <button class="next-btn" onclick="nextF1(5)">Дальше 💖</button>
+        </div>
+        <div class="page" id="f1-p5">
+            <img src="https://i.ibb.co/F4NGb43Y/image.jpg" alt="Фото" class="page-img">
+            <p class="compliment">Ты очень хороший человек, и я счастлив, что ты есть 💕</p>
+            <button class="next-btn" onclick="nextF1(6)">Дальше 💖</button>
+        </div>
+        <div class="page" id="f1-p6">
+            <img src="https://i.ibb.co/F4NGb43Y/image.jpg" alt="Фото" class="page-img">
+            <p class="compliment">Лера, ты самая лучшая. И это только начало... 💌</p>
+            <button class="next-btn" onclick="finishFolder(1)">В меню 🏠</button>
+        </div>
+    </div>
+
+    <!-- ПАПКА 2: СТИХ -->
+    <div class="book" id="folder2" style="display: none;">
+        <div class="page active" style="overflow-y: auto; justify-content: flex-start; padding-top: 40px;">
+            <h2>Для тебя, Лера ❤️</h2>
+            <p class="poem">
+                Пусть у Леры всё будет классно,<br>
+                В душе тепло, в делах успех!<br>
+                Пусть каждый день горит прекрасно,<br>
+                А счастье обгоняет всех!<br><br>
+                Мечты пусть сбудутся любые,<br>
+                Дороги стелятся легко,<br>
+                И звёзды светят золотые<br>
+                К тебе на счастье высоко!<br><br>
+                Пускай удача будет рядом,<br>
+                В глазах сияет добрый свет,<br>
+                А все невзгоды только взглядом<br>
+                Растают, словно в небе след!<br><br>
+                Живи, люби, твори, мечтай,<br>
+                Пусть каждый миг будет красив,<br>
+                И чаще smile ты излучай,<br>
+                Свой каждый день благослови!
+            </p>
+            <p>От Славы. 💖</p>
+            <button class="next-btn" onclick="finishFolder(2)" style="margin-bottom: 30px;">В меню 🏠</button>
+        </div>
+    </div>
+
+    <!-- ПАПКА 3: ВОПРОСЫ -->
+    <div class="book" id="folder3" style="display: none;">
+        <div class="page active" id="f3-p1">
+            <h2>Ты красивая?</h2>
+            <button class="ans-btn" onclick="handleQ1('Да, я красотка')">Да, я красотка 👑</button>
+            <button class="ans-btn" onclick="handleQ1('Я няшная')">Я няшная 🐱</button>
+            <button class="ans-btn" onclick="handleQ1('Нет')">Нет 🙅‍♀️</button>
+        </div>
+        <div class="page" id="f3-p2">
+            <h2 id="ans1-text" class="fade-text"></h2>
+            <div id="q2-block" style="display:none; margin-top: 20px;">
+                <h3>Кто я для тебя?</h3>
+                <input type="text" id="whoAmI" placeholder="Напиши свой ответ...">
+                <button class="ans-btn" onclick="submitTextAns()">Отправить 💌</button>
+            </div>
+        </div>
+        <div class="page" id="f3-p3">
+            <h2>Ты мне доверяешь?</h2>
+            <button class="ans-btn" onclick="handleQ3(true)">Да ❤️</button>
+            <button class="ans-btn" onclick="handleQ3(false)">Нет 💔</button>
+        </div>
+        <div class="page" id="f3-p4">
+            <h2 id="trust-text" class="fade-text"></h2>
+            <div id="q4-block" style="display:none; margin-top: 20px;">
+                <h3>Ты меня любишь?</h3>
+                <button class="ans-btn" onclick="handleQ4(true)">Да ❤️</button>
+                <button class="ans-btn" onclick="handleQ4(false)">Нет 💔</button>
+            </div>
+            <div id="q4-repeat-block" style="display:none; margin-top: 20px;">
+                <h3>Ты не шутишь?</h3>
+                <button class="ans-btn" onclick="handleQ4Final('Нет, не шучу')">Нет, не шучу 🥺</button>
+                <button class="ans-btn" onclick="handleQ4Final('Да, это так)')">Да, это так) 😘</button>
+            </div>
+        </div>
+        <div class="page" id="f3-p5">
+            <h2>Какое мнение у тебя сложилось обо мне за всё время нашего общения?</h2>
+            <input type="text" id="myOpinion" placeholder="Напиши честно...">
+            <button class="ans-btn" onclick="submitOpinion()">Отправить 💌</button>
+        </div>
+        <div class="page" id="f3-p6">
+            <h2>Спасибо за ответы! ❤️</h2>
+            <button class="next-btn" onclick="finishFolder(3)">В меню 🏠</button>
+        </div>
+    </div>
+
+    <!-- ПАПКА 4: 3 ВОПРОСА -->
+    <div class="book" id="folder4" style="display: none;">
+        <div class="page active" id="f4-p1">
+            <h2>1. Что ты чувствуешь прямо сейчас?</h2>
+            <input type="text" id="feelNow" placeholder="Напиши...">
+            <button class="ans-btn" onclick="submitF4(1)">Отправить 💌</button>
+        </div>
+        <div class="page" id="f4-p2">
+            <h2>2. О чём ты мечтаешь?</h2>
+            <input type="text" id="dreamAbout" placeholder="Напиши...">
+            <button class="ans-btn" onclick="submitF4(2)">Отправить 💌</button>
+        </div>
+        <div class="page" id="f4-p3">
+            <h2>3. Что бы ты хотела мне сказать?</h2>
+            <input type="text" id="wannaSay" placeholder="Напиши...">
+            <button class="ans-btn" onclick="submitF4(3)">Отправить 💌</button>
+        </div>
+        <div class="page" id="f4-p4">
+            <h2>Спасибо, Лерочка ❤️</h2>
+            <p class="compliment">Мне очень важно то, что ты написала. Если хочешь сказать больше, напиши мне в личные сообщения!</p>
+            <a href="https://t.me/uwukf" target="_blank" class="ans-btn" style="text-decoration: none; display: inline-block;">Написать Славе 💌</a>
+            <button class="next-btn" onclick="finishFolder(4)" style="margin-top: 10px;">В меню 🏠</button>
+        </div>
+    </div>
+
+    <!-- ПАПКА 5: СЕКРЕТИК -->
+    <div class="book" id="folder5" style="display: none;">
+        <div class="page active" id="f5-p1">
+            <h2>Секретик 🔒</h2>
+            <p class="compliment">Чтобы зайти, введи пароль:</p>
+            <input type="password" id="secretPass" placeholder="Пароль...">
+            <button class="ans-btn" onclick="checkSecretPass()">Войти 🔑</button>
+            <button class="next-btn" onclick="backToMenu()">Назад 🏠</button>
+        </div>
+        <div class="page" id="f5-p2">
+            <h2>Котики (Админ-панель)</h2>
+            <p id="admin-data" style="color: #333; font-size: 12px; line-height: 1.5; white-space: pre-wrap; text-align: left; max-height: 50vh; overflow-y: auto; background: #fff; padding: 10px; border-radius: 10px; border: 1px solid #ccc; width: 90%;"></p>
+            <button class="next-btn" onclick="backToMenu()">В меню 🏠</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
