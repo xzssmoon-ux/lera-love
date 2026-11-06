@@ -141,7 +141,7 @@ input[type="text"], input[type="password"] {
 
 .poem { font-size: 1.05rem; line-height: 1.8; font-style: italic; margin-bottom: 20px; color: #444; }
 
-/* --- НОВАЯ СЕТКА ПАПОК --- */
+/* Сетка папок */
 .folders {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -151,12 +151,11 @@ input[type="text"], input[type="password"] {
     margin: 0 auto;
 }
 
-/* 5-я папка становится по центру внизу */
 .folder:nth-child(5) {
     grid-column: 1 / -1;
     justify-self: center;
     width: 100%;
-    max-width: 160px; /* Чтобы она не растягивалась на всю ширину */
+    max-width: 160px;
 }
 
 .folder {
@@ -173,7 +172,7 @@ input[type="text"], input[type="password"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100px; /* Квадратная форма */
+    height: 100px;
 }
 
 .folder:hover {
