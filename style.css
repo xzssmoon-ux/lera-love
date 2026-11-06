@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Comfortaa', cursive;
+    background-color: #ffe6e6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+    transition: background-color 0.8s ease;
+}
+
+.corner {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23ff4d6d" d="M50 10 C50 40 20 40 10 50 C20 60 50 60 50 90 C50 60 80 60 90 50 C80 40 50 40 50 10 Z"/><circle cx="50" cy="50" r="8" fill="%23fff"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.9;
+    z-index: 10;
+}
+
+.top-left { top: 15px; left: 15px; transform: rotate(45deg); }
+.bottom-right { bottom: 15px; right: 15px; transform: rotate(-135deg); }
+
+#hearts-container {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.floating-heart {
+    position: absolute;
+    bottom: -20px;
+    color: #ff4d6d;
+    font-size: 20px;
+    opacity: 0;
+    animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 0.8; }
+    100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+}
+
+.book {
+    width: 90%;
+    max-width: 450px;
+    height: 85vh;
+    max-height: 700px;
+    position: relative;
+    border-radius: 25px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    overflow: hidden;
+    border: 4px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.page {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    padding: 30px 20px;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(5px);
+}
+
+.page.active { display: flex; }
+
+h2, h3 { color: #333; margin-bottom: 20px; font-weight: 700; line-height: 1.4; }
+.compliment { color: #333; font-size: 1.15rem; line-height: 1.6; margin-bottom: 30px; font-weight: 700; }
+
+.page-img {
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 25px;
+    border: 5px solid #ff4d6d;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    background-color: #fff;
+}
+
+.fade-text { opacity: 0; transition: opacity 0.5s ease; color: #333; }
+.fade-text.show { opacity: 1; }
+
+.ans-btn, .next-btn {
+    background-color: #ff4d6d;
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    font-size: 1.05rem;
+    border-radius: 30px;
+    cursor: pointer;
+    margin: 8px;
+    width: 85%;
+    max-width: 280px;
+    font-family: 'Comfortaa', cursive;
+    box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+    transition: transform 0.2s, background-color 0.2s;
+    text-align: center;
+    text-decoration: none;
+}
+
+.ans-btn:hover, .next-btn:hover {
+    background-color: #ff1a40;
+    transform: scale(1.05);
+}
+
+input[type="text"], input[type="password"] {
+    width: 85%;
+    padding: 14px;
+    border-radius: 30px;
+    border: 2px solid #ff4d6d;
+    font-family: 'Comfortaa', cursive;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    outline: none;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.poem { font-size: 1.05rem; line-height: 1.8; font-style: italic; margin-bottom: 20px; color: #444; }
+
+/* --- НОВАЯ СЕТКА ПАПОК --- */
+.folders {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 85%;
+    max-width: 340px;
+    margin: 0 auto;
+}
+
+/* 5-я папка становится по центру внизу */
+.folder:nth-child(5) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 100%;
+    max-width: 160px; /* Чтобы она не растягивалась на всю ширину */
+}
+
+.folder {
+    background: #ff4d6d;
+    color: white;
+    padding: 15px;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+    transition: transform 0.2s, background 0.2s;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px; /* Квадратная форма */
+}
+
+.folder:hover {
+    transform: scale(1.05);
+    background: #ff1a40;
+}
+
+.folder.locked {
+    background: #ccc;
+    cursor: not-allowed;
+    color: #666;
+    box-shadow: none;
+}
+
+.folder.locked:hover {
+    transform: none;
+    background: #ccc;
+}
